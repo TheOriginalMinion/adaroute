@@ -4,18 +4,27 @@ on:
   push:
     paths:
       - 'paper/**'
+      - '.github/workflows/draft-pdf.yml'
   workflow_dispatch:
 
 jobs:
   paper:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Build JOSS Draft PDF
-        uses: openjournals/inara-action@main
-        with:
-          args: -o pdf -p paper/paper.md
-      - name: Upload PDF artifact
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build JOSS Draft PDF using OpenJournals Inara
+        run: |
+          docker run --rm \
+            --volume "$PWD/paper:/data" \
+            --user "$(id -u):$(id -g)" \
+            --env JOURNAL=joss \
+            openjournals/inara \
+            -o pdf \
+            paper.md
+
+      - name: Upload compiled JOSS PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: joss-paper-pdf
