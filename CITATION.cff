@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use AdaRoute in your research or engineering pipelines, please cite both the software package and the companion clinical informatics manuscript."
+title: "AdaRoute: Threshold-Calibrated Decision-Entropy Routing and Bayesian Virtual Evidence Pooling for Hybrid Neuro-Symbolic Inference"
+version: 1.0.0
+date-released: 2026-10-29
+url: "https://github.com/TheOriginalMinion/adaroute"
+repository-code: "https://github.com/TheOriginalMinion/adaroute"
+license: MIT
+authors:
+  - family-names: "Amanna"
+    given-names: "Adaobi"
+    affiliation: "Whiting School of Engineering, Johns Hopkins University"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Amanna"
+      given-names: "Adaobi"
+      affiliation: "Whiting School of Engineering, Johns Hopkins University"
+  title: "AdaRoute: Threshold-Calibrated Decision-Entropy Routing and Bayesian Virtual Evidence Pooling for Hybrid Neuro-Symbolic Inference"
+  journal: "Journal of Open Source Software"
+  year: 2026
+  url: "https://github.com/TheOriginalMinion/adaroute"
+references:
+  - type: article
+    authors:
+      - family-names: "Amanna"
+        given-names: "Adaobi"
+    title: "Bridging the Semantic and Epistemic Gaps in Sepsis Risk Stratification: An AdaRoute Uncertainty-Routed Neuro-Symbolic Dynamic Bayesian Network with Test-Time Deliberation on MIMIC-IV v3.1"
+    journal: "Journal of Biomedical Informatics"
+    year: 2026
