@@ -1,0 +1,10 @@
+numpy>=1.22
+scipy>=1.8
+scikit-learn>=1.1
+
+[bn]
+pgmpy>=0.1.23
+
+[test]
+pytest>=7.0
+pytest-cov>=4.0

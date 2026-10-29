@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaroute"
+version = "1.0.0"
+description = "Threshold-Calibrated Decision-Entropy Routing and Bayesian Virtual Evidence Pooling for Hybrid Neuro-Symbolic Inference"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+  {name = "Adaobi Amanna", email = "aamanna1@jh.edu"}
+]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.22",
+  "scipy>=1.8",
+  "scikit-learn>=1.1",
+]
+keywords = ["llm-routing", "test-time-compute", "decision-entropy", "bayesian-networks", "virtual-evidence", "neuro-symbolic"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0", "pytest-cov>=4.0"]
+bn = ["pgmpy>=0.1.23"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,73 @@
+Metadata-Version: 2.4
+Name: adaroute
+Version: 1.0.0
+Summary: Threshold-Calibrated Decision-Entropy Routing and Bayesian Virtual Evidence Pooling for Hybrid Neuro-Symbolic Inference
+Author-email: Adaobi Amanna <aamanna1@jh.edu>
+License: MIT
+Keywords: llm-routing,test-time-compute,decision-entropy,bayesian-networks,virtual-evidence,neuro-symbolic
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.22
+Requires-Dist: scipy>=1.8
+Requires-Dist: scikit-learn>=1.1
+Provides-Extra: test
+Requires-Dist: pytest>=7.0; extra == "test"
+Requires-Dist: pytest-cov>=4.0; extra == "test"
+Provides-Extra: bn
+Requires-Dist: pgmpy>=0.1.23; extra == "bn"
+Dynamic: license-file
+
+# AdaRoute: Threshold-Calibrated Decision-Entropy Routing & Bayesian Virtual Evidence Pooling
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+**`AdaRoute`** (Adaptive Decision-Entropy Allocation Router) is a lightweight, domain-agnostic Python library that couples fast probabilistic tabular or graphical "System 1" estimators (`scikit-learn`, `pgmpy`) with tiered "System 2" test-time Large Language Model (LLM) deliberation (`LOW`, `MEDIUM`, `HIGH`).
+
+Rather than measuring predictive uncertainty around $p = 0.50$, `AdaRoute` centers binary Shannon entropy directly on the domain-specific operating threshold $\tau^* \in (0, 1)$, ensuring that expensive test-time LLM reasoning tokens are allocated exclusively to true decision-boundary cases while bypassing LLM calls on confident trajectories.
+
+## Installation
+
+```bash
+pip install -e ".[test]"
+```
+
+## Quickstart
+
+```python
+import numpy as np
+from adaroute import AdaRouter, LogLinearOpinionPooler, adaroute_decision_entropy
+
+# 1. Compute threshold-calibrated decision entropy H_{tau*}(p) around tau* = 0.0267
+probs = np.array([0.002, 0.0267, 0.45])
+ent = adaroute_decision_entropy(probs, tau_star=0.0267, scale=0.55, mode="logit")
+# -> array([0.006, 1.000, 0.004]) bits
+
+# 2. Route admissions across SKIP_SYSTEM1_CONFIDENT, LOW, MEDIUM, and HIGH
+router = AdaRouter(tau_star=0.0267, scale=0.55)
+tiers = router.route(probs, missing_counts=[0, 2, 0])
+# -> array(['SKIP_SYSTEM1_CONFIDENT', 'HIGH', 'SKIP_SYSTEM1_CONFIDENT'], dtype=object)
+
+# 3. Fuse System 1 and System 2 posteriors via precision-weighted log-linear pooling
+pooler = LogLinearOpinionPooler().fit_threshold_shift(tau_sys1=0.0267, tau_sys2=0.0332)
+fused_probs = pooler.fuse(probs, [0.002, 0.140, 0.45], tiers=tiers, thought_tokens=[0, 1540, 0])
+```
+
+## Running Tests
+
+```bash
+pytest -v
+```
+
+## Citation
+
+If you use `AdaRoute` in your research, please cite both the software paper and the companion clinical informatics study:
+
+- Amanna, A. (2026). AdaRoute: Threshold-Calibrated Decision-Entropy Routing and Bayesian Virtual Evidence Pooling for Hybrid Neuro-Symbolic Inference. *Journal of Open Source Software*.
+- Amanna, A. (2026). Bridging the Semantic and Epistemic Gaps in Sepsis Risk Stratification: An AdaRoute Uncertainty-Routed Neuro-Symbolic Dynamic Bayesian Network with Test-Time Deliberation on MIMIC-IV v3.1. *Journal of Biomedical Informatics* (Submitted).
